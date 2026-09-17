@@ -129,7 +129,18 @@ function render(){
 
 let html = "";
 
-data[currentTab]
+[...data[currentTab]]
+.sort((a,b) => {
+
+    const da =
+    a.date.split("/").reverse().join("-");
+
+    const db =
+    b.date.split("/").reverse().join("-");
+
+    return new Date(da) - new Date(db);
+
+})
 .forEach((item,index)=>{
 
 const jours =
@@ -147,7 +158,11 @@ html += `
 
 <div class="card ${couleur}">
 
-<h3>${item.produit}</h3>
+<h3
+style="cursor:pointer"
+onclick="voirHistorique('${item.produit}')">
+${item.produit}
+</h3>
 
 <div>
 Date : ${item.date}
@@ -175,7 +190,28 @@ document
 .innerHTML = html;
 
 }
+function voirHistorique(produit){
 
+    const historique =
+    data[currentTab]
+    .filter(
+        item =>
+        item.produit === produit
+    );
+
+    let texte =
+    produit + "\n\n";
+
+    historique.forEach(item => {
+
+        texte +=
+        item.date + "\n";
+
+    });
+
+    alert(texte);
+
+}
 function supprimer(index){
 
 data[currentTab]
