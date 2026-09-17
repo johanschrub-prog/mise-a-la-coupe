@@ -52,25 +52,25 @@ function afficherSuggestions(){
 
     }
 
-    const produits = [
+   const produits = [
 
-        ...new Set(
+    ...new Set([
 
-            data[currentTab]
-            .map(item => item.produit)
+        ...data.hotel.map(item => item.produit),
+        ...data.restaurant.map(item => item.produit)
 
-        )
+    ])
 
-    ];
+];
 
     const resultats =
     produits.filter(p =>
 
         p.toLowerCase()
-        .includes(recherche)
+       .startsWith(recherche)
 
     );
-
+console.log(resultats);
     zone.innerHTML = resultats
     .slice(0,10)
     .map(p =>
