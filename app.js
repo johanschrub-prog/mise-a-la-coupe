@@ -162,7 +162,6 @@ function voirHistorique(produit){
     alert(texte);
 
 }
-``
 
 function supprimer(id){
 
