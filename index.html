@@ -1,1 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>MISE A LA COUPE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<style>
+
+body{
+font-family:Segoe UI,sans-serif;
+margin:0;
+background:#f5f6f8;
+}
+
+header{
+background:#0a66ff;
+color:white;
+padding:15px;
+text-align:center;
+}
+
+.tabs{
+display:flex;
+gap:10px;
+padding:10px;
+background:white;
+}
+
+.tab{
+padding:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#ddd;
+}
+
+.active{
+background:#0a66ff;
+color:white;
+}
+
+.toolbar{
+padding:10px;
+background:white;
+display:flex;
+gap:10px;
+}
+
+input{
+flex:1;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.cards{
+padding:10px;
+display:grid;
+gap:10px;
+}
+
+.card{
+padding:15px;
+border-radius:12px;
+color:white;
+}
+
+.vert{
+background:#28a745;
+}
+
+.orange{
+background:#fd7e14;
+}
+
+.rouge{
+background:#dc3545;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h2>MISE A LA COUPE</h2>
+</header>
+
+<div class="tabs">
+
+<button
+class="tab active"
+onclick="changeTab('hotel',this)">
+HOTEL
+</button>
+
+<button
+class="tab"
+onclick="changeTab('restaurant',this)">
+RESTAURANT
+</button>
+
+</div>
+
+<div class="toolbar">
+
+<input
+id="produit"
+placeholder="Produit">
+
+<button onclick="ajouterProduit()">
+OK
+</button>
+
+<button onclick="exportExcel()">
+📤 Export
+</button>
+
+<button onclick="resetData()">
+🔄 Raz
+</button>
+
+</div>
+
+<div id="cards" class="cards"></div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
