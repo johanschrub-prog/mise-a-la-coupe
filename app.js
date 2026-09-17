@@ -242,7 +242,7 @@ function render(){
 
     const modeTri =
     document.getElementById("tri").value;
-
+console.log("MODE TRI :", modeTri);
     if(modeTri === "ancien"){
 
         liste.sort((a,b)=>{
