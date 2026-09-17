@@ -44,19 +44,42 @@ document
 
 if(!produit) return;
 
-const aujourdHui =
-new Date();
+let dateChoisie =
+document.getElementById("dateCoupe")
+.value;
 
-const date =
-String(
-aujourdHui.getDate()
-).padStart(2,"0")
-+ "/"
-+ String(
-aujourdHui.getMonth()+1
-).padStart(2,"0")
-+ "/"
-+ aujourdHui.getFullYear();
+let date;
+
+if(dateChoisie){
+
+    const parties =
+    dateChoisie.split("-");
+
+    date =
+    parties[2] + "/" +
+    parties[1] + "/" +
+    parties[0];
+document.getElementById(
+"dateCoupe"
+).value = "";
+}
+else{
+
+    const aujourdHui =
+    new Date();
+
+    date =
+    String(
+        aujourdHui.getDate()
+    ).padStart(2,"0")
+    + "/"
+    + String(
+        aujourdHui.getMonth()+1
+    ).padStart(2,"0")
+    + "/"
+    + aujourdHui.getFullYear();
+
+}
 
 data[currentTab].unshift({
 
