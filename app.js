@@ -122,8 +122,14 @@ function voirHistorique(produit){
     .filter(
         item =>
         item.produit === produit
-    )
-    .sort((a,b)=>{
+    );
+
+    if(historique.length === 0){
+        alert("Aucun historique");
+        return;
+    }
+
+    historique.sort((a,b)=>{
 
         const da =
         a.date.split("/").reverse().join("-");
@@ -138,6 +144,11 @@ function voirHistorique(produit){
     let texte =
     produit + "\n\n";
 
+    texte +=
+    "Nombre de mises à la coupe : "
+    + historique.length
+    + "\n\n";
+
     historique.forEach(item => {
 
         texte +=
@@ -151,6 +162,7 @@ function voirHistorique(produit){
     alert(texte);
 
 }
+``
 
 function supprimer(id){
 
