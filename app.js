@@ -34,7 +34,71 @@ function changeTab(tab, btn){
     render();
 
 }
+function afficherSuggestions(){
 
+    const recherche =
+    document.getElementById("produit")
+    .value
+    .toLowerCase()
+    .trim();
+
+    const zone =
+    document.getElementById("suggestions");
+
+    if(recherche === ""){
+
+        zone.innerHTML = "";
+        return;
+
+    }
+
+    const produits = [
+
+        ...new Set(
+
+            data[currentTab]
+            .map(item => item.produit)
+
+        )
+
+    ];
+
+    const resultats =
+    produits.filter(p =>
+
+        p.toLowerCase()
+        .includes(recherche)
+
+    );
+
+    zone.innerHTML = resultats
+    .slice(0,10)
+    .map(p =>
+
+        `<div
+        class="suggestion"
+        onclick="selectionnerProduit('${p.replace(/'/g,'\\\'')}')">
+
+        ${p}
+
+        </div>`
+
+    )
+    .join("");
+
+}
+
+function selectionnerProduit(produit){
+
+    document
+    .getElementById("produit")
+    .value = produit;
+
+    document
+    .getElementById("suggestions")
+    .innerHTML = "";
+
+}
 function ajouterProduit(){
 
     const produit =
