@@ -5,191 +5,116 @@ JSON.parse(
 localStorage.getItem("miseCoupe")
 ) || {
 
-hotel: [],
-restaurant: []
+    hotel: [],
+    restaurant: []
 
 };
 
 function save(){
 
-localStorage.setItem(
-"miseCoupe",
-JSON.stringify(data)
-);
+    localStorage.setItem(
+        "miseCoupe",
+        JSON.stringify(data)
+    );
 
 }
 
-function changeTab(tab,btn){
+function changeTab(tab, btn){
 
-currentTab = tab;
+    currentTab = tab;
 
-document
-.querySelectorAll(".tab")
-.forEach(t =>
-t.classList.remove("active"));
+    document
+    .querySelectorAll(".tab")
+    .forEach(t =>
+        t.classList.remove("active")
+    );
 
-btn.classList.add("active");
+    btn.classList.add("active");
 
-render();
+    render();
 
 }
 
 function ajouterProduit(){
 
-const produit =
-document
-.getElementById("produit")
-.value
-.trim();
+    const produit =
+    document
+    .getElementById("produit")
+    .value
+    .trim();
 
-if(!produit) return;
+    if(!produit) return;
 
-let dateChoisie =
-document.getElementById("dateCoupe")
-.value;
+    let dateChoisie =
+    document.getElementById("dateCoupe").value;
 
-let date;
+    let date;
 
-if(dateChoisie){
+    if(dateChoisie){
 
-    const parties =
-    dateChoisie.split("-");
+        const parties =
+        dateChoisie.split("-");
 
-    date =
-    parties[2] + "/" +
-    parties[1] + "/" +
-    parties[0];
-document.getElementById(
-"dateCoupe"
-).value = "";
-}
-else{
+        date =
+        parties[2] + "/" +
+        parties[1] + "/" +
+        parties[0];
 
-    const aujourdHui =
-    new Date();
+    }
+    else{
 
-    date =
-    String(
-        aujourdHui.getDate()
-    ).padStart(2,"0")
-    + "/"
-    + String(
-        aujourdHui.getMonth()+1
-    ).padStart(2,"0")
-    + "/"
-    + aujourdHui.getFullYear();
+        const d = new Date();
 
-}
+        date =
+        String(d.getDate()).padStart(2,"0")
+        + "/"
+        + String(d.getMonth()+1).padStart(2,"0")
+        + "/"
+        + d.getFullYear();
 
-data[currentTab].unshift({
+    }
 
-produit,
-date
+    data[currentTab].push({
 
-});
+        id: Date.now(),
+        produit,
+        date
 
-save();
+    });
 
-document
-.getElementById("produit")
-.value = "";
+    save();
 
-render();
+    document.getElementById("produit").value = "";
+    document.getElementById("dateCoupe").value = "";
 
-document
-.getElementById("produit")
-.focus();
+    render();
+
+    document.getElementById("produit").focus();
 
 }
 
 function joursEcoules(dateTexte){
 
-const morceaux =
-dateTexte.split("/");
+    const morceaux =
+    dateTexte.split("/");
 
-const dateProduit =
-new Date(
-morceaux[2],
-morceaux[1]-1,
-morceaux[0]
-);
+    const dateProduit =
+    new Date(
+        morceaux[2],
+        morceaux[1]-1,
+        morceaux[0]
+    );
 
-const maintenant =
-new Date();
+    const maintenant =
+    new Date();
 
-return Math.floor(
-(maintenant-dateProduit)
-/
-86400000
-);
-
-}
-
-function render(){
-
-let html = "";
-
-[...data[currentTab]]
-.sort((a,b) => {
-
-    const da =
-    a.date.split("/").reverse().join("-");
-
-    const db =
-    b.date.split("/").reverse().join("-");
-
-    return new Date(da) - new Date(db);
-
-})
-.forEach((item,index)=>{
-
-const jours =
-joursEcoules(item.date);
-
-let couleur = "vert";
-
-if(jours >= 3)
-couleur = "orange";
-
-if(jours >= 6)
-couleur = "rouge";
-
-html += `
-
-<div class="card ${couleur}">
-
-<h3
-style="cursor:pointer"
-onclick="voirHistorique('${item.produit}')">
-${item.produit}
-</h3>
-
-<div>
-Date : ${item.date}
-</div>
-
-<div>
-${jours} jour(s)
-</div>
-
-<br>
-
-<button
-onclick="supprimer(${index})">
-🗑️ Supprimer
-</button>
-
-</div>
-
-`;
-
-});
-
-document
-.getElementById("cards")
-.innerHTML = html;
+    return Math.floor(
+        (maintenant - dateProduit)
+        / 86400000
+    );
 
 }
+
 function voirHistorique(produit){
 
     const historique =
@@ -197,7 +122,18 @@ function voirHistorique(produit){
     .filter(
         item =>
         item.produit === produit
-    );
+    )
+    .sort((a,b)=>{
+
+        const da =
+        a.date.split("/").reverse().join("-");
+
+        const db =
+        b.date.split("/").reverse().join("-");
+
+        return new Date(db) - new Date(da);
+
+    });
 
     let texte =
     produit + "\n\n";
@@ -205,89 +141,217 @@ function voirHistorique(produit){
     historique.forEach(item => {
 
         texte +=
-        item.date + "\n";
+        item.date +
+        " (" +
+        joursEcoules(item.date) +
+        " jour(s))\n";
 
     });
 
     alert(texte);
 
 }
-function supprimer(index){
 
-data[currentTab]
-.splice(index,1);
+function supprimer(id){
 
-save();
+    data[currentTab] =
+    data[currentTab].filter(
+        item => item.id !== id
+    );
 
-render();
+    save();
+
+    render();
 
 }
 
 function resetData(){
 
-if(
-!confirm(
-"Tout supprimer ?"
-)
-) return;
+    if(
+        !confirm(
+            "Tout supprimer ?"
+        )
+    ) return;
 
-data[currentTab] = [];
+    data[currentTab] = [];
 
-save();
+    save();
 
-render();
+    render();
 
 }
 
 function exportExcel(){
 
-const wb =
-XLSX.utils.book_new();
+    const wb =
+    XLSX.utils.book_new();
 
-const wsHotel =
-XLSX.utils.json_to_sheet(
-data.hotel
-);
+    const wsHotel =
+    XLSX.utils.json_to_sheet(
+        data.hotel.map(item => ({
+            Produit:item.produit,
+            Date:item.date
+        }))
+    );
 
-XLSX.utils.book_append_sheet(
-wb,
-wsHotel,
-"HOTEL"
-);
+    XLSX.utils.book_append_sheet(
+        wb,
+        wsHotel,
+        "HOTEL"
+    );
 
-const wsRestaurant =
-XLSX.utils.json_to_sheet(
-data.restaurant
-);
+    const wsRestaurant =
+    XLSX.utils.json_to_sheet(
+        data.restaurant.map(item => ({
+            Produit:item.produit,
+            Date:item.date
+        }))
+    );
 
-XLSX.utils.book_append_sheet(
-wb,
-wsRestaurant,
-"RESTAURANT"
-);
+    XLSX.utils.book_append_sheet(
+        wb,
+        wsRestaurant,
+        "RESTAURANT"
+    );
 
-const d =
-new Date();
+    const d =
+    new Date();
 
-const fichier =
-"mise-a-la-coupe-" +
-d.getFullYear() +
-"-" +
-String(
-d.getMonth()+1
-).padStart(2,"0") +
-"-" +
-String(
-d.getDate()
-).padStart(2,"0") +
-".xlsx";
+    const fichier =
+    "mise-a-la-coupe-" +
+    d.getFullYear() +
+    "-" +
+    String(d.getMonth()+1).padStart(2,"0") +
+    "-" +
+    String(d.getDate()).padStart(2,"0") +
+    ".xlsx";
 
-XLSX.writeFile(
-wb,
-fichier
-);
+    XLSX.writeFile(
+        wb,
+        fichier
+    );
+
+}
+
+function render(){
+
+    let html = "";
+
+    let liste =
+    [...data[currentTab]];
+
+    const modeTri =
+    document.getElementById("tri").value;
+
+    if(modeTri === "ancien"){
+
+        liste.sort((a,b)=>{
+
+            const da =
+            a.date.split("/").reverse().join("-");
+
+            const db =
+            b.date.split("/").reverse().join("-");
+
+            return new Date(da) - new Date(db);
+
+        });
+
+    }
+
+    else if(modeTri === "recent"){
+
+        liste.sort((a,b)=>{
+
+            const da =
+            a.date.split("/").reverse().join("-");
+
+            const db =
+            b.date.split("/").reverse().join("-");
+
+            return new Date(db) - new Date(da);
+
+        });
+
+    }
+
+    else if(modeTri === "az"){
+
+        liste.sort((a,b)=>
+
+            a.produit.localeCompare(
+                b.produit,
+                "fr"
+            )
+
+        );
+
+    }
+
+    else if(modeTri === "za"){
+
+        liste.sort((a,b)=>
+
+            b.produit.localeCompare(
+                a.produit,
+                "fr"
+            )
+
+        );
+
+    }
+
+    liste.forEach(item => {
+
+        const jours =
+        joursEcoules(item.date);
+
+        let couleur = "vert";
+
+        if(jours >= 3)
+            couleur = "orange";
+
+        if(jours >= 6)
+            couleur = "rouge";
+
+        html += `
+
+        <div class="card ${couleur}">
+
+            <h3
+            style="cursor:pointer"
+            onclick="voirHistorique('${item.produit}')">
+
+            ${item.produit}
+
+            </h3>
+
+            <div>
+            Date : ${item.date}
+            </div>
+
+            <div>
+            ${jours} jour(s)
+            </div>
+
+            <br>
+
+            <button
+            onclick="supprimer(${item.id})">
+
+            🗑️ Supprimer
+
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+    document.getElementById("cards")
+    .innerHTML = html;
 
 }
 
 render();
-
