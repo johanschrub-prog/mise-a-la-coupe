@@ -49,30 +49,11 @@ padding:10px;
 background:white;
 display:flex;
 gap:10px;
-<select id="tri" onchange="render()">
-
-<option value="ancien">
-Plus ancien
-</option>
-
-<option value="recent">
-Plus récent
-</option>
-
-<option value="az">
-A → Z
-</option>
-
-<option value="za">
-Z → A
-</option>
-
-</select>
-`  
+flex-wrap:wrap;
 }
 
-input{
-flex:1;
+input,
+select{
 padding:10px;
 border-radius:8px;
 border:1px solid #ccc;
@@ -144,6 +125,26 @@ placeholder="Produit">
 <input
 type="date"
 id="dateCoupe">
+
+<select id="tri" onchange="render()">
+
+<option value="ancien">
+Plus ancien
+</option>
+
+<option value="recent">
+Plus récent
+</option>
+
+<option value="az">
+A → Z
+</option>
+
+<option value="za">
+Z → A
+</option>
+
+</select>
 
 <button onclick="ajouterProduit()">
 OK
