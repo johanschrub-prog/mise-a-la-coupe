@@ -10,7 +10,25 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
+#suggestions{
+background:white;
+border:1px solid #ccc;
+border-radius:8px;
+margin-top:4px;
+max-height:200px;
+overflow-y:auto;
+}
 
+.suggestion{
+padding:8px;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.suggestion:hover{
+background:#f0f0f0;
+}
+``
 body{
 font-family:Segoe UI,sans-serif;
 margin:0;
@@ -120,7 +138,10 @@ RESTAURANT
 
 <input
 id="produit"
-placeholder="Produit">
+placeholder="Produit"
+oninput="afficherSuggestions()">
+
+<div id="suggestions"></div>
 
 <input
 type="date"
